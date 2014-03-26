@@ -1,4 +1,4 @@
-AtomErb = require '../lib/atom-erb'
+{WorkspaceView} = require 'atom'
 
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
@@ -6,24 +6,25 @@ AtomErb = require '../lib/atom-erb'
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "AtomErb", ->
-  activationPromise = null
+  [activationPromise, editor, editorView] = []
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
-    activationPromise = atom.packages.activatePackage('atomErb')
+    atom.workspaceView.openSync()
+    editorView = atom.workspaceView.getActiveView()
+    editor = editorView.getEditor()
 
-  describe "when the atom-erb:toggle event is triggered", ->
-    it "attaches and then detaches the view", ->
-      expect(atom.workspaceView.find('.atom-erb')).not.toExist()
+    activationPromise = atom.packages.activatePackage('atom-erb')
 
-      # This is an activation event, triggering it will cause the package to be
-      # activated.
-      atom.workspaceView.trigger 'atom-erb:toggle'
-
-      waitsForPromise ->
-        activationPromise
-
+  describe "atom-erb:erb command", ->
+    beforeEach ->
       runs ->
-        expect(atom.workspaceView.find('.atom-erb')).toExist()
-        atom.workspaceView.trigger 'atom-erb:toggle'
-        expect(atom.workspaceView.find('.atom-erb')).not.toExist()
+        editor.setText ""
+        editor.setCursorBufferPosition([0, 0])
+        editorView.trigger('atom-erb:erb')
+
+    it "inserts the ERB tag", ->
+      expect(editor.getText()).toBe "<%=  %>"
+
+    it "moves the cursor into the ERB tag", ->
+      expect(editor.getCursorBufferPosition().toArray()).toBe [0, 4]

@@ -1,4 +1,5 @@
 {WorkspaceView} = require 'atom'
+AtomErb = require "../lib/atom-erb"
 
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
@@ -6,25 +7,23 @@
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "AtomErb", ->
-  [activationPromise, editor, editorView] = []
+  [editor, editorView, atomErb] = []
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
-    atom.workspaceView.openSync()
+    atom.workspace = atom.workspaceView.model
+    atom.workspaceView.openSync('test.erb')
     editorView = atom.workspaceView.getActiveView()
-    editor = editorView.getEditor()
+    {editor} = editorView
+    atomErb = AtomErb.activate()
+    editor.setCursorBufferPosition([0,0])
 
-    activationPromise = atom.packages.activatePackage('atom-erb')
-
-  describe "atom-erb:erb command", ->
+  describe "atom-erb:erb", ->
     beforeEach ->
-      runs ->
-        editor.setText ""
-        editor.setCursorBufferPosition([0, 0])
-        editorView.trigger('atom-erb:erb')
+      editorView.trigger "atom-erb:erb"
 
     it "inserts the ERB tag", ->
-      expect(editor.getText()).toBe "<%=  %>"
+      expect(editor.getText()).toEqual "<%=  %>"
 
-    it "moves the cursor into the ERB tag", ->
-      expect(editor.getCursorBufferPosition().toArray()).toBe [0, 4]
+    it "moves the cursor inside the ERB tag", ->
+      expect(editor.getCursorBufferPosition().toArray()).toEqual [0,4]

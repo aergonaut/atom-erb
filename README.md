@@ -13,6 +13,7 @@ Press `cmd-shift-.` to insert `<%= %>` around the current cursor.
 ## TODO
 
 - Toggle between different ERB tags (`<% %>`, `<%- %>`, etc.).
+- Insert tags around selection.
 - Better specs.
 - Menu items.
 - Context menu items.

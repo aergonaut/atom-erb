@@ -1,5 +1,7 @@
 # Atom ERB
 
+[![Build Status](https://travis-ci.org/aergonaut/atom-erb.svg)](https://travis-ci.org/aergonaut/atom-erb)
+
 Provides basic ERB support to Atom.
 
 ## Installation

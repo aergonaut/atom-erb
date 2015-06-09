@@ -2,7 +2,7 @@
   "name": "atom-erb",
   "main": "./lib/atom-erb",
   "version": "0.1.0",
-  "description": "A short description of your package",
+  "description": "Provides basic ERB support to Atom",
   "activationEvents": [
     "atom-erb:erb"
   ],

@@ -1,29 +1,36 @@
-{WorkspaceView} = require 'atom'
-AtomErb = require "../lib/atom-erb"
-
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
 # To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "AtomErb", ->
-  [editor, editorView, atomErb] = []
+  [editor, editorElement, workspaceElement] = []
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspace = atom.workspaceView.model
-    atom.workspaceView.openSync('test.erb')
-    editorView = atom.workspaceView.getActiveView()
-    {editor} = editorView
-    atomErb = AtomErb.activate()
-    editor.setCursorBufferPosition([0,0])
+    workspaceElement = atom.views.getView(atom.workspace)
 
-  describe "atom-erb:erb", ->
-    beforeEach ->
-      editorView.trigger "atom-erb:erb"
+    waitsForPromise ->
+      atom.workspace.open('test.erb')
 
-    it "inserts the ERB tag", ->
-      expect(editor.getText()).toEqual "<%=  %>"
+    runs ->
+      editor = atom.workspace.getActiveTextEditor()
+      editorElement = atom.views.getView(editor)
+      editor.setCursorBufferPosition([0,0])
 
-    it "moves the cursor inside the ERB tag", ->
-      expect(editor.getCursorBufferPosition().toArray()).toEqual [0,4]
+    waitsForPromise ->
+      atom.packages.activatePackage('atom-erb')
+
+  describe "atom-erb", ->
+    describe "activation", ->
+      it "should be in the packages list", ->
+        expect(atom.packages.loadedPackages["atom-erb"]).toBeDefined()
+
+    describe "atom-erb:erb", ->
+      beforeEach ->
+        atom.commands.dispatch workspaceElement, "atom-erb:erb"
+
+      it "inserts the ERB tag", ->
+        expect(editor.getText()).toEqual "<%=  %>"
+
+      it "moves the cursor inside the ERB tag", ->
+        expect(editor.getCursorBufferPosition().toArray()).toEqual [0,4]

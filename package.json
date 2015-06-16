@@ -3,13 +3,9 @@
   "main": "./lib/atom-erb",
   "version": "0.1.0",
   "description": "A short description of your package",
-  "activationCommands": {
-    "atom-workspace": ["atom-erb:erb"]
-  },
   "repository": "https://github.com/aergonaut/atom-erb",
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
-  },
-  "dependencies": {}
+    "atom": ">=0.174.0 <2.0.0"
+  }
 }

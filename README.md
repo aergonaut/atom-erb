@@ -10,7 +10,7 @@ Install with `apm` or from the Preferences screen.
 
 ## Usage
 
-Press `cmd-shift-.` to insert `<%= %>` around the current cursor.
+Press `ctlr->` to insert `<%= %>` around the current cursor.
 
 ## TODO
 
